@@ -29,6 +29,22 @@
           </p>
           @enderror
       </div>
+      <div class="mb-3">
+        <h5>Tag</h5>
+        @foreach ($tags as $tag )
+          <span class="d-line-block mr-3" >
+            <input type="checkbox"
+              name="tags[]"
+              value="{{$tag->id}}"
+              id="tag{{$loop->iteration}}"
+              @if (in_array($tag->id, old('tags',[])) || $post->tags->contains($tag->id)) checked @endif
+            >
+            <label for="tag{{$loop->iteration}}">{{$tag->name}}</label>
+  
+          </span>
+          
+        @endforeach
+      </div>
       <button type="submit" class="btn btn-primary" >Invia</button>
       <button type="reset" class="btn btn-secondary" >Reset</button>
     </form>  

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Post;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,9 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.posts.create',compact('tags'),compact('categories'));
     }
 
     /**
@@ -47,6 +50,11 @@ class PostsController extends Controller
         $data['slug'] = Post::generateSlug($data['title']);
         $new_post->fill($data);
         $new_post->save();
+
+        if(array_key_exists('tags', $data)){
+            $new_post->tags()->attach($data['tags']);
+        }
+
         return redirect()->route('admin.posts.index');
     }
 
@@ -71,8 +79,11 @@ class PostsController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        $categories = Category::all();
+        $tags = Tag::all();
+
         
-            return view('admin.posts.edit',compact('post'));
+            return view('admin.posts.edit',compact('post','categories','tags'));
                 
     }
 
@@ -109,16 +120,16 @@ class PostsController extends Controller
     private function validationData(){
         return[
             'title' => 'required|max:50|min:2',
-            'content' => 'required|max:255',
+            'content' => 'required|max:255|min:2',
         ];
     }
     private function validationErrors(){
         return[
            'title.required' => 'il titolo è un campo obbligatorio',
            'title.max' => 'il numero di caratteri  consentito è di :max caratteri',
-           'title.min' => 'il numero di caratteri  consentito è di :min caratteri',
+           'title.min' => 'il numero di caratteri  consentito è di minimo :min caratteri',
            'content.required' => 'il contenuto è un campo obbligatorio',
-           'content.required' => 'il numero di caratteri consentito è di :max caratteri'
+           'content.min' => 'il numero di caratteri consentito è di minimo :min caratteri'
 
         ];
     }
