@@ -9,6 +9,7 @@
           <tr>
             <th scope="col">id</th>
             <th scope="col">titolo</th>
+            <th scope="col">tags</th>
             <th scope="col">categoria</th>
             <th scope="col">azioni</th>
           </tr>
@@ -19,6 +20,13 @@
                 
                 <th scope="row">{{$post->id}}</th>
                 <td>{{$post->title}}</td>
+                <td>
+                  @forelse ($post->tags as $tag )
+                    <span class="badge bg-primary">{{$tag->name}}</span>
+                  @empty
+                    -
+                  @endforelse
+                </td>
 
                 @if ($post->category)
                   <td>{{$post->category->name}}</td>
@@ -45,6 +53,7 @@
        
         </tbody>
       </table>
+      {{$posts->links()}}
       @foreach ($categories as $category )
         <h2>{{$category->name}}</h2>
         <ul>
