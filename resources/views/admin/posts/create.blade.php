@@ -2,6 +2,19 @@
 @section('content')
 <div class="container">
 
+  <h1>nuovo post</h1>
+
+  @if ($errors->any())
+    <div class="alert alert-danger" role="alert">
+      <ul>
+        @foreach ($errors->all() as $error )
+          <li>{{$error}}</li>
+        @endforeach
+      </ul>
+    </div>
+    
+  @endif
+
   <form action="{{route('admin.posts.store')}}" method="POST">
     @csrf
     <div class="form-group">
@@ -16,7 +29,7 @@
    
     <div class="form-group">
       <label for="exampleFormControlTextarea1">contenuto</label>
-      <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="inserisci qui il contenuto del nuovo post"></textarea>
+      <textarea name="content" class="form-control @error('title') is-invalid @enderror"  id="exampleFormControlTextarea1" rows="3" placeholder="inserisci qui il contenuto del nuovo post"></textarea>
     </div>
     <div class="mb-3">
      
